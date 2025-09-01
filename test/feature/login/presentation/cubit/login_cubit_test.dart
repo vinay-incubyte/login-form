@@ -6,12 +6,12 @@ void main() {
   late LoginCubit loginCubit;
   late GlobalKey<FormState> formKey;
 
-  setUp((){
+  setUp(() {
     loginCubit = LoginCubit();
     formKey = GlobalKey();
   });
 
-  group('verify Login form', (){
+  group('verify Login form', () {
     test('verify initial state', () async {
       // assert
       expect(loginCubit.state, LoginForm(isFormValid: false));
@@ -20,6 +20,14 @@ void main() {
     test('verify LoginForm state when credentials valid', () async {
       // arrange
       final expected = [LoginForm(isFormValid: true)];
+      expectLater(loginCubit.stream, emitsInOrder(expected));
+      // act
+      loginCubit.validateForm(formKey);
+    });
+
+    test('verify LoginForm state when credentials invalid', () async {
+      // arrange
+      final expected = [LoginForm(isFormValid: false)];
       expectLater(loginCubit.stream, emitsInOrder(expected));
       // act
       loginCubit.validateForm(formKey);
