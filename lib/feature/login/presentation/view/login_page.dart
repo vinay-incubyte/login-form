@@ -18,8 +18,6 @@ class _LoginPageState extends State<LoginPage>
   final TextEditingController passwordController = TextEditingController();
   late LoginCubit loginCubit;
 
-  bool? isUser;
-
   @override
   void initState() {
     super.initState();
@@ -46,16 +44,23 @@ class _LoginPageState extends State<LoginPage>
               _buildEmailField(),
               _buildPasswordField(),
               _buildLoginButton(),
-              if (isUser != null)
-                Text(
-                  isUser!
-                      ? "Login success"
-                      : "Login Failure - wrong password/email",
-                ),
+
+              _buildAuthText(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  BlocSelector<LoginCubit, LoginState, bool> _buildAuthText() {
+    return BlocSelector<LoginCubit, LoginState, bool>(
+      selector: (state) => (state is LoginAuth) ? state.isUser : false,
+      builder: (context, isUser) {
+        return Text(
+          isUser ? "Login success" : "Login Failure - wrong password/email",
+        );
+      },
     );
   }
 
@@ -65,7 +70,6 @@ class _LoginPageState extends State<LoginPage>
         return ElevatedButton(
           onPressed: isFormValid
               ? () async {
-                  isUser = null;
                   final email = emailController.text.trim();
                   final password = passwordController.text.trim();
                   loginCubit.onLoginTap(email: email, password: password);
