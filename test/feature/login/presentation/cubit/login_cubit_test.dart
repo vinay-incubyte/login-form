@@ -54,7 +54,7 @@ void main() {
       final expected = [LoginAuth(isUser: false)];
       expectLater(loginCubit.stream, emitsInOrder(expected));
       // act
-      loginCubit.onLoginTap(email: "vinay@incubyte.co", password: "1234Ab@");
+      loginCubit.onLoginTap(email: "vinay@incubyte.co", password: "1234Aa@");
     });
   });
 }
