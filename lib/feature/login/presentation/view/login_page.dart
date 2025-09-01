@@ -36,16 +36,19 @@ class _LoginPageState extends State<LoginPage>
     return Scaffold(
       appBar: AppBar(title: Text('Login')),
       body: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            spacing: 20,
-            children: [
-              _buildEmailField(),
-              _buildPasswordField(),
-              _buildLoginButton(),
-              _buildAuthText(),
-            ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              spacing: 20,
+              children: [
+                _buildEmailField(),
+                _buildPasswordField(),
+                _buildLoginButton(),
+                _buildAuthText(),
+              ],
+            ),
           ),
         ),
       ),
@@ -88,13 +91,33 @@ class _LoginPageState extends State<LoginPage>
       autovalidateMode: AutovalidateMode.onUserInteraction,
       onChanged: (value) => loginCubit.validateForm(formKey.currentState),
       validator: (value) {
-        if ((value?.isEmpty ?? true) || value == null) return null;
+        if (!validateEmail(emailController.text) && (value?.isEmpty ?? false)) {
+          return null;
+        }
+        if (value == null || value.isEmpty) return "Password is required";
         final isValidPass = validatePassword(value);
         return isValidPass
             ? null
             : 'Password should be -\nMin 2 char long\nContain upper and lower case char\nContain special char';
       },
+      decoration: InputDecoration(
+        border: border,
+        focusedBorder: focusBorder,
+        errorBorder: errorBorder,
+      ),
     );
+  }
+
+  OutlineInputBorder get border {
+    return OutlineInputBorder(borderSide: BorderSide(color: Colors.grey));
+  }
+
+  OutlineInputBorder get focusBorder {
+    return OutlineInputBorder(borderSide: BorderSide(color: Colors.green));
+  }
+
+  OutlineInputBorder get errorBorder {
+    return OutlineInputBorder(borderSide: BorderSide(color: Colors.red));
   }
 
   TextFormField _buildEmailField() {
@@ -103,10 +126,15 @@ class _LoginPageState extends State<LoginPage>
       autovalidateMode: AutovalidateMode.onUserInteraction,
       onChanged: (value) => loginCubit.validateForm(formKey.currentState),
       validator: (value) {
-        if ((value?.isEmpty ?? true) || value == null) return null;
+        if (value == null || value.isEmpty) return "Email is required";
         final isvalidEmail = validateEmail(value);
         return isvalidEmail ? null : "Enter a vaild email";
       },
+      decoration: InputDecoration(
+        border: border,
+        focusedBorder: focusBorder,
+        errorBorder: errorBorder,
+      ),
     );
   }
 }
