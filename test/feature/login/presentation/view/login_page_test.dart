@@ -24,5 +24,19 @@ void main() {
       expect(find.byType(TextFormField), findsExactly(2));
       expect(find.byType(ElevatedButton), findsOne);
     });
+
+    testWidgets('verfiy email field when valid login', (tester) async {
+      // arrange
+      await tester.pumpWidget(loadPage());
+      await tester.pumpAndSettle();
+      //act
+      await tester.enterText(
+        find.byType(TextFormField).at(0),
+        "vinay@incubyte.co",
+      );
+      // assert
+      expect(find.byType(TextFormField).at(0), "vinay@incubyte.co");
+      expect(find.text('Not a vaild email'), findsNothing);
+    });
   });
 }
