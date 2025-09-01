@@ -13,5 +13,14 @@ void main() {
       // assert
       expect(success, true);
     });
+
+    test('verify invalid email', () async {
+       // arrange
+      final EmailTest emailTest = EmailTest();
+      // act
+      final success = emailTest.validateEmail("vinay@incubyte");
+      // assert
+      expect(success, false);
+    });
   });
 }
