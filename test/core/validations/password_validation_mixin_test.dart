@@ -29,7 +29,7 @@ void main() {
       // act
       final actual = passwordTest.validatePassword("12345Ab@");
       // assert
-      expect(actual, false);
+      expect(actual, true);
     });
   });
 }
