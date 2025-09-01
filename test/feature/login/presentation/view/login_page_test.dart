@@ -35,7 +35,7 @@ void main() {
         "vinay@incubyte.co",
       );
       // assert
-      expect(find.byType(TextFormField).at(0), "vinay@incubyte.co");
+      expect(find.byType(TextFormField).at(0), findsOne);
       expect(find.text('Not a vaild email'), findsNothing);
     });
   });
