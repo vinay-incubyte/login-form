@@ -13,5 +13,14 @@ void main() {
       // assert
       expect(actual, true);
     });
+
+    test('verfiy password contain upper and lower case', () async {
+      // arrange
+      final PasswordTest passwordTest = PasswordTest();
+      // act
+      final actual = passwordTest.validatePassword("12345");
+      // assert
+      expect(actual, false);
+    });
   });
 }
