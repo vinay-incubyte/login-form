@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> with EmailValidationMixin {
             validator: (value) {
               if (value == null) return null;
               final isvalidEmail = validateEmail(value);
-              return isvalidEmail ? null : "Not a vaild email";
+              return isvalidEmail ? null : "Enter a vaild email";
             },
           ),
           TextFormField(),
