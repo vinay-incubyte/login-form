@@ -11,11 +11,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with EmailValidationMixin, PasswordValidationMixin {
-  final GlobalKey formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   bool? isUser;
+
+  bool get isFormValid => (formKey.currentState?.validate() ?? false);
 
   @override
   void dispose() {
@@ -37,6 +39,7 @@ class _LoginPageState extends State<LoginPage>
               TextFormField(
                 controller: emailController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                onChanged: (value) => setState(() {}),
                 validator: (value) {
                   if (value == null) return null;
                   final isvalidEmail = validateEmail(value);
@@ -46,6 +49,7 @@ class _LoginPageState extends State<LoginPage>
               TextFormField(
                 controller: passwordController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                onChanged: (value) => setState(() {}),
                 validator: (value) {
                   if (value == null) return null;
                   final isValidPass = validatePassword(value);
@@ -55,16 +59,18 @@ class _LoginPageState extends State<LoginPage>
                 },
               ),
               ElevatedButton(
-                onPressed: () async {
-                  isUser = null;
-                  final email = emailController.text.trim();
-                  final password = passwordController.text.trim();
-                  isUser = await _MockAuthCall().isUser(
-                    email: email,
-                    password: password,
-                  );
-                  setState(() {});
-                },
+                onPressed: isFormValid
+                    ? () async {
+                        isUser = null;
+                        final email = emailController.text.trim();
+                        final password = passwordController.text.trim();
+                        isUser = await _MockAuthCall().isUser(
+                          email: email,
+                          password: password,
+                        );
+                        setState(() {});
+                      }
+                    : null,
                 child: Text('Login ->'),
               ),
               if (isUser != null)
