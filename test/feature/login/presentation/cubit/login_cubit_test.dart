@@ -26,7 +26,7 @@ void main() {
     test('verify LoginForm state when credentials valid', () async {
       // arrange
       when(formKey.validate()).thenReturn(true);
-      final expected = [LoginForm(isFormValid: true)];
+      final expected = [LoginAuth(isUser: null), LoginForm(isFormValid: true)];
       expectLater(loginCubit.stream, emitsInOrder(expected));
       // act
       loginCubit.validateForm(formKey);
@@ -35,7 +35,7 @@ void main() {
     test('verify LoginForm state when credentials invalid', () async {
       // arrange
       when(formKey.validate()).thenReturn(false);
-      final expected = [LoginForm(isFormValid: false)];
+      final expected = [LoginAuth(isUser: null), LoginForm(isFormValid: false)];
       expectLater(loginCubit.stream, emitsInOrder(expected));
       // act
       loginCubit.validateForm(formKey);
