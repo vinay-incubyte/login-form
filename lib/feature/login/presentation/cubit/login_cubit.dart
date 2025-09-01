@@ -12,4 +12,8 @@ class LoginCubit extends Cubit<LoginState> {
     final isValid = formKey?.validate() ?? false;
     emit(LoginForm(isFormValid: isValid));
   }
+
+  void onLoginTap({required String email, required String password}){
+    
+  }
 }

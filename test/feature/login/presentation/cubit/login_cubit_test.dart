@@ -40,5 +40,13 @@ void main() {
       // act
       loginCubit.validateForm(formKey);
     });
+
+    test('verify LoginAuth state when user is valid', () async {
+      // arrange
+      final expected = [LoginAuth(isUser: true)];
+      expectLater(loginCubit.stream, emitsInOrder(expected));
+      // act
+      loginCubit.onLoginTap(email: "vinay@incubyte.co", password: "1234Ab@");
+    });
   });
 }
