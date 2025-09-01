@@ -10,6 +10,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Login')));
+    return Scaffold(
+      appBar: AppBar(title: Text('Login')),
+      body: Column(
+        children: [
+          TextFormField(),
+          TextFormField(),
+          ElevatedButton(onPressed: null, child: Text('Login ->')),
+        ],
+      ),
+    );
   }
 }
