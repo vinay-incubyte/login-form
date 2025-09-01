@@ -15,5 +15,14 @@ void main() {
       // assert
       expect(find.text('Login'), findsOne);
     });
+
+    testWidgets('verfiy textfields and button', (tester) async {
+      // arrange
+      await tester.pumpWidget(loadPage());
+      await tester.pumpAndSettle();
+      // assert
+      expect(find.byType(TextFormField), findsExactly(2));
+      expect(find.byType(ElevatedButton), findsOne);
+    });
   });
 }
