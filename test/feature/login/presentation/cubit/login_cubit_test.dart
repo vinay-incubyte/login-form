@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:login_form/feature/login/presentation/cubit/login_cubit.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
+import 'login_cubit_test.mocks.dart';
+
+@GenerateMocks([FormState])
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   late LoginCubit loginCubit;
-  late GlobalKey<FormState> formKey;
+  late MockFormState formKey;
 
   setUp(() {
     loginCubit = LoginCubit();
-    formKey = GlobalKey();
+    formKey = MockFormState();
   });
 
   group('verify Login form', () {
@@ -19,6 +25,7 @@ void main() {
 
     test('verify LoginForm state when credentials valid', () async {
       // arrange
+      when(formKey.validate()).thenReturn(true);
       final expected = [LoginForm(isFormValid: true)];
       expectLater(loginCubit.stream, emitsInOrder(expected));
       // act
@@ -27,6 +34,7 @@ void main() {
 
     test('verify LoginForm state when credentials invalid', () async {
       // arrange
+      when(formKey.validate()).thenReturn(false);
       final expected = [LoginForm(isFormValid: false)];
       expectLater(loginCubit.stream, emitsInOrder(expected));
       // act

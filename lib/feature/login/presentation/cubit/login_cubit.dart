@@ -8,7 +8,8 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginForm(isFormValid: false));
 
-  void validateForm(GlobalKey<FormState> formKey) {
-    emit(LoginForm(isFormValid: true));
+  void validateForm(FormState formKey) {
+    final isValid = formKey.validate();
+    emit(LoginForm(isFormValid: isValid));
   }
 }
