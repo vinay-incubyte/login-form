@@ -9,7 +9,7 @@ void main() {
       // arrange
       final PasswordTest passwordTest = PasswordTest();
       // act
-      final actual = passwordTest.validatePassword("12345Ab");
+      final actual = passwordTest.validatePassword("12345Ab@");
       // assert
       expect(actual, true);
     });
@@ -18,7 +18,16 @@ void main() {
       // arrange
       final PasswordTest passwordTest = PasswordTest();
       // act
-      final actual = passwordTest.validatePassword("12345");
+      final actual = passwordTest.validatePassword("12345Ab@");
+      // assert
+      expect(actual, true);
+    });
+
+    test('verfiy password contain special character', () async {
+      // arrange
+      final PasswordTest passwordTest = PasswordTest();
+      // act
+      final actual = passwordTest.validatePassword("12345Ab@");
       // assert
       expect(actual, false);
     });
