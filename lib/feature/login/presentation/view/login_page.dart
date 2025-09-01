@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_form/core/validations/email_validation_mixin.dart';
 import 'package:login_form/core/validations/password_validation_mixin.dart';
+import 'package:login_form/feature/login/presentation/cubit/login_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,10 +16,15 @@ class _LoginPageState extends State<LoginPage>
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  late LoginCubit loginCubit;
 
   bool? isUser;
 
-  bool get isFormValid => (formKey.currentState?.validate() ?? false);
+  @override
+  void initState() {
+    super.initState();
+    loginCubit = context.read<LoginCubit>();
+  }
 
   @override
   void dispose() {
@@ -36,43 +43,9 @@ class _LoginPageState extends State<LoginPage>
           child: Column(
             spacing: 20,
             children: [
-              TextFormField(
-                controller: emailController,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: (value) => setState(() {}),
-                validator: (value) {
-                  if (value == null) return null;
-                  final isvalidEmail = validateEmail(value);
-                  return isvalidEmail ? null : "Enter a vaild email";
-                },
-              ),
-              TextFormField(
-                controller: passwordController,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                onChanged: (value) => setState(() {}),
-                validator: (value) {
-                  if (value == null) return null;
-                  final isValidPass = validatePassword(value);
-                  return isValidPass
-                      ? null
-                      : 'Password should be -\nMin 2 char long\nContain upper and lower case char\nContain special char';
-                },
-              ),
-              ElevatedButton(
-                onPressed: isFormValid
-                    ? () async {
-                        isUser = null;
-                        final email = emailController.text.trim();
-                        final password = passwordController.text.trim();
-                        isUser = await _MockAuthCall().isUser(
-                          email: email,
-                          password: password,
-                        );
-                        setState(() {});
-                      }
-                    : null,
-                child: Text('Login ->'),
-              ),
+              _buildEmailField(),
+              _buildPasswordField(),
+              _buildLoginButton(),
               if (isUser != null)
                 Text(
                   isUser!
@@ -83,6 +56,57 @@ class _LoginPageState extends State<LoginPage>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return BlocSelector<LoginCubit, LoginState, bool>(
+      builder: (context, isFormValid) {
+        return ElevatedButton(
+          onPressed: isFormValid
+              ? () async {
+                  isUser = null;
+                  final email = emailController.text.trim();
+                  final password = passwordController.text.trim();
+                  isUser = await _MockAuthCall().isUser(
+                    email: email,
+                    password: password,
+                  );
+                  setState(() {});
+                }
+              : null,
+          child: Text('Login ->'),
+        );
+      },
+      selector: (state) => (state is LoginForm) ? state.isFormValid : false,
+    );
+  }
+
+  TextFormField _buildPasswordField() {
+    return TextFormField(
+      controller: passwordController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      onChanged: (value) => loginCubit.validateForm(formKey.currentState),
+      validator: (value) {
+        if ((value?.isEmpty ?? true) || value == null) return null;
+        final isValidPass = validatePassword(value);
+        return isValidPass
+            ? null
+            : 'Password should be -\nMin 2 char long\nContain upper and lower case char\nContain special char';
+      },
+    );
+  }
+
+  TextFormField _buildEmailField() {
+    return TextFormField(
+      controller: emailController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      onChanged: (value) => loginCubit.validateForm(formKey.currentState),
+      validator: (value) {
+        if ((value?.isEmpty ?? true) || value == null) return null;
+        final isvalidEmail = validateEmail(value);
+        return isvalidEmail ? null : "Enter a vaild email";
+      },
     );
   }
 }

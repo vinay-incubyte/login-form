@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:login_form/feature/login/presentation/cubit/login_cubit.dart';
 import 'package:login_form/feature/login/presentation/view/login_page.dart';
 
 void main() {
   group('verify login page', () {
     Widget loadPage() {
-      return MaterialApp(home: LoginPage());
+      return BlocProvider(
+      create: (context) => LoginCubit(),
+        child: MaterialApp(home: LoginPage()),
+      );
     }
 
     testWidgets('verify page title', (tester) async {
