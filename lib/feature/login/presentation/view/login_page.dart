@@ -68,11 +68,7 @@ class _LoginPageState extends State<LoginPage>
                   isUser = null;
                   final email = emailController.text.trim();
                   final password = passwordController.text.trim();
-                  isUser = await _MockAuthCall().isUser(
-                    email: email,
-                    password: password,
-                  );
-                  setState(() {});
+                  loginCubit.onLoginTap(email: email, password: password);
                 }
               : null,
           child: Text('Login ->'),
