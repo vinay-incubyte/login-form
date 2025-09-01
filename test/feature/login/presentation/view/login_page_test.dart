@@ -113,7 +113,7 @@ void main() {
         "vinay@incubyte.co",
       );
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextFormField).at(1), "1234Ab@");
+      await tester.enterText(find.byType(TextFormField).at(1), "1234Ab@8");
       await tester.pumpAndSettle();
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();

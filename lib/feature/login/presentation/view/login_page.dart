@@ -11,13 +11,16 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with EmailValidationMixin, PasswordValidationMixin {
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final GlobalKey formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  bool? isUser;
 
   @override
   void dispose() {
-    email.dispose();
-    password.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -26,34 +29,62 @@ class _LoginPageState extends State<LoginPage>
     return Scaffold(
       appBar: AppBar(title: Text('Login')),
       body: SingleChildScrollView(
-        child: Column(
-          spacing: 20,
-          children: [
-            TextFormField(
-              controller: email,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) {
-                if (value == null) return null;
-                final isvalidEmail = validateEmail(value);
-                return isvalidEmail ? null : "Enter a vaild email";
-              },
-            ),
-            TextFormField(
-              controller: password,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) {
-                if (value == null) return null;
-                final isValidPass = validatePassword(value);
-                return isValidPass
-                    ? null
-                    : 'Password should be -\nMin 2 char long\nContain upper and lower case char\nContain special char';
-              },
-            ),
-            ElevatedButton(onPressed: () {}, child: Text('Login ->')),
-            Text("Login success"),
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            spacing: 20,
+            children: [
+              TextFormField(
+                controller: emailController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null) return null;
+                  final isvalidEmail = validateEmail(value);
+                  return isvalidEmail ? null : "Enter a vaild email";
+                },
+              ),
+              TextFormField(
+                controller: passwordController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null) return null;
+                  final isValidPass = validatePassword(value);
+                  return isValidPass
+                      ? null
+                      : 'Password should be -\nMin 2 char long\nContain upper and lower case char\nContain special char';
+                },
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  isUser = null;
+                  final email = emailController.text.trim();
+                  final password = passwordController.text.trim();
+                  isUser = await _MockAuthCall().isUser(
+                    email: email,
+                    password: password,
+                  );
+                  setState(() {});
+                },
+                child: Text('Login ->'),
+              ),
+              if (isUser != null)
+                Text(
+                  isUser!
+                      ? "Login success"
+                      : "Login Failure - wrong password/email",
+                ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class _MockAuthCall {
+  Future<bool> isUser({required String email, required String password}) async {
+    await Future.delayed(Durations.long1);
+    return (email == "vinay@incubyte.co" &&
+        password.hashCode == "1234Ab@".hashCode);
   }
 }
