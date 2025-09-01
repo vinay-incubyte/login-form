@@ -54,5 +54,35 @@ void main() {
       expect(find.byType(TextFormField).at(0), findsOne);
       expect(find.text('Enter a vaild email'), findsOne);
     });
+
+    testWidgets('verfiy password field when valid', (tester) async {
+      // arrange
+      await tester.pumpWidget(loadPage());
+      await tester.pumpAndSettle();
+      //act
+      await tester.enterText(
+        find.byType(TextFormField).at(1),
+        "1234Ab@",
+      );
+      await tester.pumpAndSettle();
+      // assert
+      expect(find.byType(TextFormField).at(1), findsOne);
+      expect(find.text('Enter a vaild password'), findsNothing);
+    });
+
+    testWidgets('verfiy password field when invalid', (tester) async {
+      // arrange
+      await tester.pumpWidget(loadPage());
+      await tester.pumpAndSettle();
+      //act
+      await tester.enterText(
+        find.byType(TextFormField).at(1),
+        "1234",
+      );
+      await tester.pumpAndSettle();
+      // assert
+      expect(find.byType(TextFormField).at(1), findsOne);
+      expect(find.text('Password should be -\nMin 2 char long\nContain upper and lower case char\nContain special char'), findsOne);
+    });
   });
 }
