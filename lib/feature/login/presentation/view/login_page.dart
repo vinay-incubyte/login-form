@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage>
               _buildEmailField(),
               _buildPasswordField(),
               _buildLoginButton(),
-
               _buildAuthText(),
             ],
           ),
@@ -53,10 +52,11 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
-  BlocSelector<LoginCubit, LoginState, bool> _buildAuthText() {
-    return BlocSelector<LoginCubit, LoginState, bool>(
-      selector: (state) => (state is LoginAuth) ? state.isUser : false,
+  BlocSelector<LoginCubit, LoginState, bool?> _buildAuthText() {
+    return BlocSelector<LoginCubit, LoginState, bool?>(
+      selector: (state) => (state is LoginAuth) ? state.isUser : null,
       builder: (context, isUser) {
+        if (isUser == null) return SizedBox.shrink();
         return Text(
           isUser ? "Login success" : "Login Failure - wrong password/email",
         );

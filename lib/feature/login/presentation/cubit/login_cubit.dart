@@ -9,6 +9,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void validateForm(FormState? formKey) {
     final isValid = formKey?.validate() ?? false;
+    emit(LoginAuth(isUser: null));
     emit(LoginForm(isFormValid: isValid));
   }
 

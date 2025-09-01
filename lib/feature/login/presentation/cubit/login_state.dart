@@ -11,13 +11,13 @@ final class LoginForm extends LoginState {
   LoginForm({required this.isFormValid});
 
   @override
-  List<Object?> get props => [super.props, isFormValid];
+  List<Object?> get props => [isFormValid];
 }
 
 final class LoginAuth extends LoginState {
-  final bool isUser;
+  final bool? isUser;
   LoginAuth({required this.isUser});
 
   @override
-  List<Object?> get props => [super.props, isUser];
+  List<Object?> get props => [isUser];
 }
