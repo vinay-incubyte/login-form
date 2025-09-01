@@ -1,5 +1,6 @@
 mixin PasswordValidationMixin {
   bool validatePassword(String password) {
-    return true;
+    final passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z]).{2,}$');
+    return passwordRegex.hasMatch(password);
   }
 }

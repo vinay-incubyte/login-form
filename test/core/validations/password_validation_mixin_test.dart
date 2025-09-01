@@ -9,7 +9,7 @@ void main() {
       // arrange
       final PasswordTest passwordTest = PasswordTest();
       // act
-      final actual = passwordTest.validatePassword("12345");
+      final actual = passwordTest.validatePassword("12345Ab");
       // assert
       expect(actual, true);
     });
