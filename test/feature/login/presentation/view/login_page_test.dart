@@ -34,9 +34,25 @@ void main() {
         find.byType(TextFormField).at(0),
         "vinay@incubyte.co",
       );
+      await tester.pumpAndSettle();
       // assert
       expect(find.byType(TextFormField).at(0), findsOne);
       expect(find.text('Not a vaild email'), findsNothing);
+    });
+
+    testWidgets('verfiy email field when invalid login', (tester) async {
+      // arrange
+      await tester.pumpWidget(loadPage());
+      await tester.pumpAndSettle();
+      //act
+      await tester.enterText(
+        find.byType(TextFormField).at(0),
+        "vinay@incubyte",
+      );
+      await tester.pumpAndSettle();
+      // assert
+      expect(find.byType(TextFormField).at(0), findsOne);
+      expect(find.text('Enter a vaild email'), findsOne);
     });
   });
 }
