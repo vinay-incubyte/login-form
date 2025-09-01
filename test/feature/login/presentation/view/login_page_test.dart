@@ -121,5 +121,26 @@ void main() {
       expect(find.byType(ElevatedButton), findsOne);
       expect(find.text('Login Failure - wrong password/email'), findsOne);
     });
+
+    testWidgets('verfiy login button disabled when invalid email', (
+      tester,
+    ) async {
+      // arrange
+      await tester.pumpWidget(loadPage());
+      await tester.pumpAndSettle();
+      //act
+      await tester.enterText(
+        find.byType(TextFormField).at(0),
+        "vinay@incubyte.",
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextFormField).at(1), "1234Ab@8");
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      // assert (enabled means onPressed != null)
+      expect(button.onPressed, isNull);
+    });
   });
 }
